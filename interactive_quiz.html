@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rehab Service Triage Quiz</title>
+    <style>
+        /* Basic styling for a clean, friendly look */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+            background: #f9f9f9;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .section {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-top: 0.5rem;
+        }
+
+        select, input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 4px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .result {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #e6f2ff;
+            border-left: 5px solid #007acc;
+            border-radius: 4px;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 10px 20px;
+            background: #007acc;
+            color: white;
+            text-decoration: none;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #005fa3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Find Your Best Rehab Option</h1>
+        <p>Answer a few quick questions to discover whether online rehab, an in‑person session, or a combination is right for you.  
+        This quiz does not diagnose medical conditions.  If you are experiencing severe or urgent symptoms, please seek immediate medical attention.</p>
+
+        <form id="quizForm" onsubmit="return false;">
+            <!-- Step 1: Body area selection -->
+            <div id="step1" class="section" style="display: block;">
+                <label for="bodyArea">Which area of your body is giving you trouble?</label>
+                <select id="bodyArea" required onchange="showRegionQuestions()">
+                    <option value="">--Select--</option>
+                    <option value="lower_back">Lower back / lumbar</option>
+                    <option value="upper_back">Upper back / neck</option>
+                    <option value="shoulder">Shoulder</option>
+                    <option value="elbow">Elbow / arm</option>
+                    <option value="wrist">Wrist / hand</option>
+                    <option value="hip">Hip / pelvis</option>
+                    <option value="knee">Knee</option>
+                    <option value="ankle">Ankle / foot</option>
+                    <option value="multi">Multiple areas / general</option>
+                </select>
+            </div>
+
+            <!-- Step 2: Common questions -->
+            <div id="commonQuestions" class="section">
+                <label for="onsetWhen">When did the issue start?</label>
+                <select id="onsetWhen" required>
+                    <option value="">--Select--</option>
+                    <option value="today">Today</option>
+                    <option value="week">Within the last week</option>
+                    <option value="month">Within the last month</option>
+                    <option value="long">Over a month ago</option>
+                </select>
+
+                <label for="onsetHow">How did it start?</label>
+                <select id="onsetHow" required>
+                    <option value="">--Select--</option>
+                    <option value="sudden_activity">Suddenly during activity</option>
+                    <option value="gradual">Gradually over time</option>
+                    <option value="accident">Accident / trauma</option>
+                    <option value="unknown">Unsure</option>
+                </select>
+
+                <label for="painSeverity">On a scale of 0–10, how would you rate your pain or discomfort?</label>
+                <input id="painSeverity" type="number" min="0" max="10" step="1" required placeholder="0–10" />
+
+                <label>Are you able to do your usual activities?</label>
+                <label><input type="radio" name="dailyImpact" value="yes" required> Yes, with minor discomfort</label>
+                <label><input type="radio" name="dailyImpact" value="modify"> I have to modify some activities</label>
+                <label><input type="radio" name="dailyImpact" value="no"> No, it stops me from doing normal tasks</label>
+
+                <p><strong>Do you have any of the following?</strong> (Check all that apply)</p>
+                <label><input type="checkbox" id="flagTrauma"> Recent trauma (fall, accident or collision)</label>
+                <label><input type="checkbox" id="flagNumb"> Numbness, tingling or weakness</label>
+                <label><input type="checkbox" id="flagSwelling"> Marked swelling, deformity or bruising</label>
+                <label><input type="checkbox" id="flagNight"> Severe or unrelenting pain at rest or at night</label>
+                <label><input type="checkbox" id="flagSystemic"> Recent unexplained weight loss or fever</label>
+                <label><input type="checkbox" id="flagBladder"> Loss of bladder or bowel control (for spine)</label>
+
+            </div>
+
+            <!-- Step 3: Region-specific questions -->
+            <div id="regionQuestions" class="section">
+                <!-- Lower back questions -->
+                <div id="lower_back_questions" class="region">
+                    <h3>Lower back / lumbar</h3>
+                    <label>Does the pain spread into your legs or feet (sciatica)?</label>
+                    <label><input type="radio" name="lbSpread" value="yes" required> Yes</label>
+                    <label><input type="radio" name="lbSpread" value="no"> No</label>
+                    
+                    <label>Do you feel numbness or tingling in your legs or toes?</label>
+                    <label><input type="radio" name="lbNumb" value="yes" required> Yes</label>
+                    <label><input type="radio" name="lbNumb" value="no"> No</label>
+
+                    <label>Can you bend forward and return upright without severe pain?</label>
+                    <label><input type="radio" name="lbMob" value="yes" required> Yes</label>
+                    <label><input type="radio" name="lbMob" value="difficult"> Painful but possible</label>
+                    <label><input type="radio" name="lbMob" value="no"> No, very painful or impossible</label>
+                </div>
+
+                <!-- Upper back / neck questions -->
+                <div id="upper_back_questions" class="region">
+                    <h3>Upper back / neck</h3>
+                    <label>Do movements such as turning your head increase pain?</label>
+                    <label><input type="radio" name="ubTurn" value="yes" required> Yes</label>
+                    <label><input type="radio" name="ubTurn" value="no"> No</label>
+
+                    <label>Have you recently experienced headaches, dizziness or visual changes?</label>
+                    <label><input type="radio" name="ubHead" value="yes" required> Yes</label>
+                    <label><input type="radio" name="ubHead" value="no"> No</label>
+
+                    <label>Do you have numbness or weakness in your arms or hands?</label>
+                    <label><input type="radio" name="ubNumb" value="yes" required> Yes</label>
+                    <label><input type="radio" name="ubNumb" value="no"> No</label>
+                </div>
+
+                <!-- Shoulder questions -->
+                <div id="shoulder_questions" class="region">
+                    <h3>Shoulder</h3>
+                    <label>Which movements aggravate your symptoms? (Choose one)</label>
+                    <select id="shMove" required>
+                        <option value="">--Select--</option>
+                        <option value="overhead">Raising arm overhead</option>
+                        <option value="back">Reaching behind your back</option>
+                        <option value="lifting">Lifting objects</option>
+                        <option value="all">All movements are painful</option>
+                    </select>
+
+                    <label>Can you reach overhead or to the side without severe pain?</label>
+                    <label><input type="radio" name="shReach" value="yes" required> Yes</label>
+                    <label><input type="radio" name="shReach" value="difficult"> Difficult</label>
+                    <label><input type="radio" name="shReach" value="no"> No</label>
+
+                    <label>Do you have any feeling of instability (as if the shoulder might “pop out”)?</label>
+                    <label><input type="radio" name="shInst" value="yes" required> Yes</label>
+                    <label><input type="radio" name="shInst" value="no"> No</label>
+                </div>
+
+                <!-- Elbow questions -->
+                <div id="elbow_questions" class="region">
+                    <h3>Elbow / arm</h3>
+                    <label>Does gripping or lifting objects make it worse?</label>
+                    <label><input type="radio" name="elGrip" value="yes" required> Yes</label>
+                    <label><input type="radio" name="elGrip" value="no"> No</label>
+
+                    <label>Is there swelling, bruising or tingling around the elbow?</label>
+                    <label><input type="radio" name="elSwelling" value="yes" required> Yes</label>
+                    <label><input type="radio" name="elSwelling" value="no"> No</label>
+
+                    <label>Can you fully bend and straighten your elbow?</label>
+                    <label><input type="radio" name="elMob" value="yes" required> Yes</label>
+                    <label><input type="radio" name="elMob" value="discomfort"> With discomfort</label>
+                    <label><input type="radio" name="elMob" value="no"> No, very limited</label>
+                </div>
+
+                <!-- Wrist questions -->
+                <div id="wrist_questions" class="region">
+                    <h3>Wrist / hand</h3>
+                    <label>Where is your discomfort?</label>
+                    <select id="wrArea" required>
+                        <option value="">--Select--</option>
+                        <option value="joint">Wrist joint</option>
+                        <option value="palm">Palm</option>
+                        <option value="fingers">Fingers</option>
+                    </select>
+
+                    <label>Do you have numbness or tingling in your fingers?</label>
+                    <label><input type="radio" name="wrNumb" value="yes" required> Yes</label>
+                    <label><input type="radio" name="wrNumb" value="no"> No</label>
+
+                    <label>Have you had a fall on your outstretched hand?</label>
+                    <label><input type="radio" name="wrFall" value="yes" required> Yes</label>
+                    <label><input type="radio" name="wrFall" value="no"> No</label>
+                </div>
+
+                <!-- Hip questions -->
+                <div id="hip_questions" class="region">
+                    <h3>Hip / pelvis</h3>
+                    <label>Do you feel pain when walking or climbing stairs?</label>
+                    <label><input type="radio" name="hipWalk" value="yes" required> Yes</label>
+                    <label><input type="radio" name="hipWalk" value="no"> No</label>
+
+                    <label>Is there stiffness when you get up from sitting?</label>
+                    <label><input type="radio" name="hipStiff" value="yes" required> Yes</label>
+                    <label><input type="radio" name="hipStiff" value="no"> No</label>
+
+                    <label>Have you recently fallen or had a direct blow to your hip?</label>
+                    <label><input type="radio" name="hipFall" value="yes" required> Yes</label>
+                    <label><input type="radio" name="hipFall" value="no"> No</label>
+                </div>
+
+                <!-- Knee questions -->
+                <div id="knee_questions" class="region">
+                    <h3>Knee</h3>
+                    <label>Did the pain begin with an obvious injury (e.g., twisting, fall)?</label>
+                    <label><input type="radio" name="knInjury" value="yes" required> Yes</label>
+                    <label><input type="radio" name="knInjury" value="no"> No</label>
+
+                    <label>Does your knee swell or feel unstable (like it is “giving way”)?</label>
+                    <label><input type="radio" name="knSwelling" value="yes" required> Yes</label>
+                    <label><input type="radio" name="knSwelling" value="no"> No</label>
+
+                    <label>Can you stand or walk on the affected leg?</label>
+                    <label><input type="radio" name="knWeight" value="yes" required> Yes, normally</label>
+                    <label><input type="radio" name="knWeight" value="discomfort"> With discomfort</label>
+                    <label><input type="radio" name="knWeight" value="no"> No</label>
+                </div>
+
+                <!-- Ankle questions -->
+                <div id="ankle_questions" class="region">
+                    <h3>Ankle / foot</h3>
+                    <label>Did you roll or twist your ankle?</label>
+                    <label><input type="radio" name="anTwist" value="yes" required> Yes</label>
+                    <label><input type="radio" name="anTwist" value="no"> No</label>
+
+                    <label>Is there swelling or bruising around your ankle or foot?</label>
+                    <label><input type="radio" name="anSwelling" value="yes" required> Yes</label>
+                    <label><input type="radio" name="anSwelling" value="no"> No</label>
+
+                    <label>Can you bear weight on the foot for at least four steps?</label>
+                    <label><input type="radio" name="anWeight" value="yes" required> Yes</label>
+                    <label><input type="radio" name="anWeight" value="discomfort"> Painful</label>
+                    <label><input type="radio" name="anWeight" value="no"> No</label>
+                </div>
+
+                <!-- Multiple areas questions -->
+                <div id="multi_questions" class="region">
+                    <h3>Multiple areas / general</h3>
+                    <label>Which area is the most limiting for you? (Optional)</label>
+                    <input type="text" id="multiMainArea" placeholder="e.g., left knee" />
+
+                    <label>Does any one area have severe pain, swelling, numbness or weakness?</label>
+                    <label><input type="radio" name="multiSevere" value="yes" required> Yes</label>
+                    <label><input type="radio" name="multiSevere" value="no"> No</label>
+
+                    <label>Is there an underlying health condition you think might be related?</label>
+                    <label><input type="radio" name="multiCondition" value="yes" required> Yes</label>
+                    <label><input type="radio" name="multiCondition" value="no"> No</label>
+                    <label><input type="radio" name="multiCondition" value="unsure"> Unsure</label>
+                </div>
+            </div>
+
+            <!-- Submit button -->
+            <div id="submitSection" class="section">
+                <button type="button" class="btn" onclick="evaluateQuiz()">See Recommendation</button>
+            </div>
+        </form>
+
+        <!-- Results output -->
+        <div id="results" class="result" style="display: none;"></div>
+    </div>
+
+    <script>
+        /**
+         * Show region-specific questions based on selected body area.
+         */
+        function showRegionQuestions() {
+            const area = document.getElementById('bodyArea').value;
+            const commonSection = document.getElementById('commonQuestions');
+            const regionSection = document.getElementById('regionQuestions');
+            const submitSection = document.getElementById('submitSection');
+            // Hide all region question groups
+            document.querySelectorAll('.region').forEach(div => {
+                div.style.display = 'none';
+            });
+            // Reset results
+            document.getElementById('results').style.display = 'none';
+            if (!area) {
+                commonSection.style.display = 'none';
+                submitSection.style.display = 'none';
+                return;
+            }
+            commonSection.style.display = 'block';
+            regionSection.style.display = 'block';
+            submitSection.style.display = 'block';
+            const selectedDiv = document.getElementById(area + '_questions');
+            if (selectedDiv) {
+                selectedDiv.style.display = 'block';
+            }
+        }
+
+        /**
+         * Evaluate the quiz based on user responses and display a recommendation.
+         */
+        function evaluateQuiz() {
+            // Clear previous result
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.style.display = 'none';
+            resultsDiv.innerHTML = '';
+
+            // Red flag detection
+            const redFlags = [
+                document.getElementById('flagTrauma').checked,
+                document.getElementById('flagNumb').checked,
+                document.getElementById('flagSwelling').checked,
+                document.getElementById('flagNight').checked,
+                document.getElementById('flagSystemic').checked,
+                document.getElementById('flagBladder').checked
+            ];
+            const hasRedFlag = redFlags.some(Boolean);
+
+            // Gather pain severity
+            const pain = parseInt(document.getElementById('painSeverity').value, 10);
+            // Gather daily life impact
+            const dailyImpact = document.querySelector('input[name="dailyImpact"]:checked').value;
+
+            // Body area to check specific questions
+            const area = document.getElementById('bodyArea').value;
+
+            let moderate = false;
+
+            // Determine moderate complexity via region-specific answers
+            switch (area) {
+                case 'lower_back':
+                    // Spread to legs or numbness considered moderate complexity
+                    const lbSpread = document.querySelector('input[name="lbSpread"]:checked').value === 'yes';
+                    const lbNumb = document.querySelector('input[name="lbNumb"]:checked').value === 'yes';
+                    const lbMob = document.querySelector('input[name="lbMob"]:checked').value;
+                    if (lbSpread || lbNumb || lbMob === 'no' || lbMob === 'difficult') moderate = true;
+                    break;
+                case 'upper_back':
+                    const ubTurn = document.querySelector('input[name="ubTurn"]:checked').value === 'yes';
+                    const ubHead = document.querySelector('input[name="ubHead"]:checked').value === 'yes';
+                    const ubNumb = document.querySelector('input[name="ubNumb"]:checked').value === 'yes';
+                    if (ubTurn || ubHead || ubNumb) moderate = true;
+                    break;
+                case 'shoulder':
+                    const shMove = document.getElementById('shMove').value;
+                    const shReach = document.querySelector('input[name="shReach"]:checked').value;
+                    const shInst = document.querySelector('input[name="shInst"]:checked').value === 'yes';
+                    // 'all' movements painful, difficulty reaching, or instability count as moderate
+                    if (shMove === 'all' || shReach === 'no' || shReach === 'difficult' || shInst) moderate = true;
+                    break;
+                case 'elbow':
+                    const elGrip = document.querySelector('input[name="elGrip"]:checked').value === 'yes';
+                    const elSw = document.querySelector('input[name="elSwelling"]:checked').value === 'yes';
+                    const elMob = document.querySelector('input[name="elMob"]:checked').value;
+                    if (elGrip || elSw || elMob === 'no' || elMob === 'discomfort') moderate = true;
+                    break;
+                case 'wrist':
+                    const wrNumb = document.querySelector('input[name="wrNumb"]:checked').value === 'yes';
+                    const wrFall = document.querySelector('input[name="wrFall"]:checked').value === 'yes';
+                    if (wrNumb || wrFall) moderate = true;
+                    break;
+                case 'hip':
+                    const hipWalk = document.querySelector('input[name="hipWalk"]:checked').value === 'yes';
+                    const hipStiff = document.querySelector('input[name="hipStiff"]:checked').value === 'yes';
+                    const hipFall = document.querySelector('input[name="hipFall"]:checked').value === 'yes';
+                    if (hipWalk || hipStiff || hipFall) moderate = true;
+                    break;
+                case 'knee':
+                    const knInjury = document.querySelector('input[name="knInjury"]:checked').value === 'yes';
+                    const knSwelling = document.querySelector('input[name="knSwelling"]:checked').value === 'yes';
+                    const knWeight = document.querySelector('input[name="knWeight"]:checked').value;
+                    if (knInjury || knSwelling || knWeight === 'no' || knWeight === 'discomfort') moderate = true;
+                    break;
+                case 'ankle':
+                    const anTwist = document.querySelector('input[name="anTwist"]:checked').value === 'yes';
+                    const anSw = document.querySelector('input[name="anSwelling"]:checked').value === 'yes';
+                    const anWeight = document.querySelector('input[name="anWeight"]:checked').value;
+                    if (anTwist || anSw || anWeight === 'no' || anWeight === 'discomfort') moderate = true;
+                    break;
+                case 'multi':
+                    const multiSevere = document.querySelector('input[name="multiSevere"]:checked').value === 'yes';
+                    // Multiple areas severe triggers moderate
+                    if (multiSevere) moderate = true;
+                    break;
+                default:
+                    break;
+            }
+
+            let recommendation;
+            if (hasRedFlag) {
+                recommendation = {
+                    title: 'Urgent In‑Person Evaluation Needed',
+                    message: 'Some of the symptoms you reported suggest you might need urgent medical assessment. Please seek immediate care from your doctor or emergency services. We are here to support you once any urgent issues have been addressed.'
+                };
+            } else if (pain >= 7 || dailyImpact === 'no') {
+                recommendation = {
+                    title: 'In‑Person Session Recommended',
+                    message: 'Based on your responses, seeing a physiotherapist in person is the best next step. A hands‑on assessment will help us understand the cause of your symptoms and plan your recovery. Please book an in‑person session so we can help you safely.'
+                };
+            } else if ((pain >= 4 && pain <= 6) || dailyImpact === 'modify' || moderate) {
+                recommendation = {
+                    title: 'Combination of In‑Person + Online Rehab',
+                    message: 'Your answers indicate that a blended approach may be ideal. We recommend starting with an in‑person session to assess your condition, followed by online coaching to support your rehab. Let’s work together to choose the right path for you.'
+                };
+            } else {
+                recommendation = {
+                    title: 'Online Rehab Likely Appropriate',
+                    message: 'Your responses suggest that your condition may be well suited to online rehabilitation. We can guide you through tailored exercises and regular check‑ins to help you recover. If your symptoms worsen or you develop new concerns, please contact us for an in‑person assessment.'
+                };
+            }
+
+            // Display the result
+            resultsDiv.style.display = 'block';
+            resultsDiv.innerHTML = `<h3>${recommendation.title}</h3><p>${recommendation.message}</p>`;
+            // Scroll to the results for better UX
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
